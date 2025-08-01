@@ -3,7 +3,6 @@ st.title("DelFloods")
 st.write("Welcome to our flood prediction model")
 
 import pandas as pd
-import sklearn
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, accuracy_score
