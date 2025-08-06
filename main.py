@@ -30,7 +30,7 @@ print(classification_report(y_test, y_pred))
 
 print("\n🔎 Enter today's weather details to predict flood risk:")
 
-river_level = float(input("🌊 River level (in meters): "))
+river_level = st.number_float(input("🌊 River level (in meters): "))
 
 
 def fetch_weather_data():
