@@ -30,7 +30,7 @@ print(classification_report(y_test, y_pred))
 
 print("\n🔎 Enter today's weather details to predict flood risk:")
 
-river_level = st.number_float(input("🌊 River level (in meters): "))
+river_level = st.number_input("🌊 River level (in meters): ")
 
 
 def fetch_weather_data():
@@ -83,4 +83,5 @@ prediction = model.predict(new_data)
 # Show result
 print("\n📢 Prediction based on your input:")
 print("➡️ FLOOD ⚠️" if prediction[0] == 1 else "➡️ NO FLOOD ✅")
+
 
