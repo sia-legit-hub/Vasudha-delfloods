@@ -72,17 +72,22 @@ if weather and river_level:
         'windspeed': weather['windspeed']
     }])
 
-    # Make prediction
-    prediction = model.predict(input_data)[0]
-
-    # Show result
-    st.subheader("📢 Prediction Result:")
-    if prediction == 1:
-        st.error("⚠️ FLOOD LIKELY – Stay safe!")
+      # Show river level rule-based prediction
+    st.subheader("📢 River Level:")
+    if river_level > 206:
+        st.error("🔴 ALERT: River level is above 206m. Flood WILL occur.")
+    elif river_level > 204.6:
+        st.warning("🟠 WARNING: River level is above 204.6m. Flood MAY occur.")
     else:
-        st.success("✅ NO FLOOD expected today.")
-else:
-    st.info("Please enter a valid river level and make sure weather data is available.")
+        st.success("🟢 River level is below 204.6m. Flood is NOT expected from river level alone.")
+
+    # Also run the model prediction
+    prediction = model.predict(input_data)[0]
+    st.subheader("📊 Model-Based Prediction:")
+    if prediction == 1:
+        st.error("⚠️ Model says: FLOOD LIKELY – Stay safe!")
+    else:
+        st.success("✅ Model says: NO FLOOD expected today.")
 
 
 
