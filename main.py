@@ -82,7 +82,7 @@ if weather and river_level:
         st.success("🟢 River level is below 204.6m. Flood is NOT expected from river level alone.")
 
     # Also run the model prediction
-   prediction = model.predict(input_data)[0]
+prediction = model.predict(input_data)[0]
 st.subheader("📊 Model-Based Prediction:")
 
 if prediction == 2:
@@ -91,6 +91,7 @@ elif prediction == 1:
     st.warning("🟠 Model says: FLOOD MAY OCCUR – Stay alert!")
 else:
     st.success("🟢 Model says: NO FLOOD expected today.")
+
 
 
 
