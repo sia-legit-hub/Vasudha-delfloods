@@ -57,6 +57,8 @@ def fetch_weather_data():
 
     if response.status_code == 200:
         data = response.json()
+        ds= pd.DataFrame(data)
+        ds.to_csv('output.csv', index=False)
         # Print the weather data for today
         today_data = data.get("days", [{}])[0]
         print(f"Weather in {location} on {today}:")
@@ -83,6 +85,7 @@ prediction = model.predict(new_data)
 # Show result
 print("\n📢 Prediction based on your input:")
 print("➡️ FLOOD ⚠️" if prediction[0] == 1 else "➡️ NO FLOOD ✅")
+
 
 
 
