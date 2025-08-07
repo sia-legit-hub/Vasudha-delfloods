@@ -70,7 +70,7 @@ fetch_weather_data()
 
 # Format the input as a DataFrame
 new_data = pd.DataFrame([{
-    'precip': rainfall,
+    'precip': precip,
     'River_Level': river_level,
     'temp': temp,
     'humidity': humidity,
@@ -83,5 +83,6 @@ prediction = model.predict(new_data)
 # Show result
 print("\n📢 Prediction based on your input:")
 print("➡️ FLOOD ⚠️" if prediction[0] == 1 else "➡️ NO FLOOD ✅")
+
 
 
