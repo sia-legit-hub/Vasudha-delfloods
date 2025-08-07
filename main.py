@@ -13,7 +13,7 @@ from sklearn.metrics import classification_report, accuracy_score
 df = pd.read_csv("delhi_flood_data_2023.csv")
 
 # 2. Features and target
-X = df[['precip', 'River_Level', 'Temp', 'Humidity', 'Wind']]
+X = df[['precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
 y = df['Flood']
 
 # 3. Split the data
@@ -83,6 +83,7 @@ prediction = model.predict(new_data)
 # Show result
 print("\n📢 Prediction based on your input:")
 print("➡️ FLOOD ⚠️" if prediction[0] == 1 else "➡️ NO FLOOD ✅")
+
 
 
 
