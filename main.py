@@ -4,63 +4,85 @@ import requests
 from datetime import datetime
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report,accuracy_score
-import os
 
+# Page setup
+st.title("DelFloods")
+st.write("🌧️ Welcome to our flood prediction model")
 
+# ✅ Cached model training to avoid re-training on each rerun
+@st.cache_resource
+def train_model():
+    df = pd.read_csv("delhi_flood_data_2023.csv")
+    X = df[['precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
+    y = df['Flood']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    model = RandomForestClassifier(n_estimators=100)
+    model.fit(X_train, y_train)
+    accuracy = model.score(X_test, y_test)
+    return model, accuracy
+
+# Train model
+model, accuracy = train_model()
+st.write("✅ Model accuracy on test data:", accuracy)
+
+# Input for river level
+river_level = st.number_input("🌊 Enter current river level (in meters):", min_value=0.0, max_value=50.0, step=0.1)
+
+# ✅ Function to safely fetch weather data
 def fetch_weather_data():
-    api_key = 'HC8QD5Y25CNY89PCZB3643W4X'
-    location = 'Delhi,IN'
-    url = f'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{location}/today?unitGroup=metric&key={api_key}&include=current'
+    location = "Delhi,IN"
+    today = datetime.now().strftime("%Y-%m-%d")
+    api_key = "HC8QD5Y25CNY89PCZB3643W4X"
 
-    response = requests.get(url)
+    url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{location}/{today}/{today}"
+    params = {
+        "unitGroup": "metric",
+        "include": "days",
+        "key": api_key,
+        "contentType": "json"
+    }
+
+    response = requests.get(url, params=params)
     if response.status_code == 200:
         data = response.json()
-        current = data['currentConditions']
-        weather_data = {
-            'datetime': datetime.now(),
-            'temp': current.get('temp'),
-            'humidity': current.get('humidity'),
-            'precip': current.get('precip'),
-            'windspeed': current.get('windspeed')
-        }
+        if "days" in data and len(data["days"]) > 0:
+            today_data = data["days"][0]
+            return {
+                "precip": today_data.get("precip") or 0.0,
+                "temp": today_data.get("temp") or 0.0,
+                "humidity": today_data.get("humidity") or 0.0,
+                "windspeed": today_data.get("windspeed") or 0.0
+            }
+    return None
 
-        df = pd.DataFrame([weather_data])
-        file_exists = os.path.isfile('weather_data.csv')
-        header_needed = not file_exists or os.stat('weather_data.csv').st_size == 0
-        df.to_csv('weather_data.csv', mode='a', header=header_needed, index=False)
-        return weather_data
+# Get weather
+weather = fetch_weather_data()
+
+# Make prediction if both inputs are ready
+if weather and river_level:
+    st.subheader("📊 Today's Weather Data:")
+    st.json(weather)
+
+    # Format data for prediction
+    input_data = pd.DataFrame([{
+        'precip': weather['precip'],
+        'River_Level': river_level,
+        'temp': weather['temp'],
+        'humidity': weather['humidity'],
+        'windspeed': weather['windspeed']
+    }])
+
+    # Make prediction
+    prediction = model.predict(input_data)[0]
+
+    # Show result
+    st.subheader("📢 Prediction Result:")
+    if prediction == 1:
+        st.error("⚠️ FLOOD LIKELY – Stay safe!")
     else:
-        st.error("Failed to fetch weather data.")
-        return None
-
-# Streamlit App
-st.title("🌊 Delhi Flood Prediction")
-
-river_level = st.number_input("Enter current river level (in meters):", min_value=0.0, max_value=15.0)
-
-if st.button("Fetch weather and predict flood"):
-    weather = fetch_weather_data()
-    if weather:
-        st.write("Live weather data:", weather)
-
-        # Create model input
-        new_data = pd.DataFrame([{
-            'precip': weather['precip'],
-            'River_Level': river_level,
-            'temp': weather['temp'],
-            'humidity': weather['humidity'],
-            'windspeed': weather['windspeed']
-        }])
-
-        # Make prediction
-        prediction = model.predict(new_data)
-
-        # Show result
-        if prediction[0] == 1:
-            st.error("⚠️ FLOOD RISK PREDICTED!")
-        else:
-            st.success("✅ No flood expected today.")
+        st.success("✅ NO FLOOD expected today.")
+else:
+    st.info("Please enter a valid river level and make sure weather data is available.")
 
 
 
