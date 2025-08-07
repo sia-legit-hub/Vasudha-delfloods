@@ -34,36 +34,34 @@ river_level = st.number_input("🌊 River level (in meters): ")
 
 
 def fetch_weather_data():
-    # Define location and date (Delhi, India)
     location = "Delhi,IN"
     today = datetime.now().strftime("%Y-%m-%d")
+    api_key = "HC8QD5Y25CNY89PCZB3643W4X"  # Replace with your real key
 
-    # Visual Crossing API Key (replace with your actual key)
-    api_key = "HC8QD5Y25CNY89PCZB3643W4X"  # <- Replace this with your API key
-
-    # Build the API endpoint
     url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{location}/{today}/{today}"
-    
-    # Query parameters
     params = {
-        "unitGroup": "metric",       # Use "us" for Fahrenheit and mph
+        "unitGroup": "metric",
         "include": "days",
         "key": api_key,
         "contentType": "json"
     }
 
-    # Make the request
     response = requests.get(url, params=params)
 
     if response.status_code == 200:
         data = response.json()
-        today_data = data.get("days", [{}])[0]
-        return {
-            "precip": today_data.get("precip", 0),
-            "temp": today_data.get("temp", 0),
-            "humidity": today_data.get("humidity", 0),
-            "windspeed": today_data.get("windspeed", 0)
-        }
+
+        if "days" in data and len(data["days"]) > 0:
+            today_data = data["days"][0]
+            return {
+                "precip": today_data.get("precip", 0),
+                "temp": today_data.get("temp", 0),
+                "humidity": today_data.get("humidity", 0),
+                "windspeed": today_data.get("windspeed", 0)
+            }
+        else:
+            st.warning("⚠️ No weather data found for today.")
+            return None
     else:
         st.error(f"Failed to fetch weather data. Code: {response.status_code}")
         return None
@@ -84,6 +82,7 @@ prediction = model.predict(new_data)
 # Show result
 print("\n📢 Prediction based on your input:")
 print("➡️ FLOOD ⚠️" if prediction[0] == 1 else "➡️ NO FLOOD ✅")
+
 
 
 
