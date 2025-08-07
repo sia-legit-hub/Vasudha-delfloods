@@ -7,24 +7,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report,accuracy_score
 import os
 
-# 1. Load the data
-df = pd.read_csv("delhi_flood_data_2023.csv")
-
-# 2. Features and target
-X = df[['Rainfall', 'River_Level', 'Temp', 'Humidity', 'Windspeed']]
-y = df['Flood']
-
-# 3. Split the data
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# 4. Train the model
-model = RandomForestClassifier(n_estimators=100)
-model.fit(X_train, y_train)
-
-# 5. Predict and evaluate
-y_pred = model.predict(X_test)
-print("Accuracy:", accuracy_score(y_test, y_pred))
-print(classification_report(y_test, y_pred))
 
 def fetch_weather_data():
     api_key = 'HC8QD5Y25CNY89PCZB3643W4X'
@@ -79,6 +61,7 @@ if st.button("Fetch weather and predict flood"):
             st.error("⚠️ FLOOD RISK PREDICTED!")
         else:
             st.success("✅ No flood expected today.")
+
 
 
 
