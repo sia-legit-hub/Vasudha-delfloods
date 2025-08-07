@@ -26,7 +26,7 @@ model, accuracy = train_model()
 st.write("✅ Model accuracy on test data:", accuracy)
 
 # Input for river level
-river_level = st.number_input("🌊 Enter current river level (in meters):", min_value=0.0, max_value=50.0, step=0.1)
+river_level = st.number_input("🌊 Enter current river level (in meters):", min_value=0.0, step=0.1)
 
 # ✅ Function to safely fetch weather data
 def fetch_weather_data():
@@ -83,6 +83,7 @@ if weather and river_level:
         st.success("✅ NO FLOOD expected today.")
 else:
     st.info("Please enter a valid river level and make sure weather data is available.")
+
 
 
 
