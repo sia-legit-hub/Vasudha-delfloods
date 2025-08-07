@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import requests
 from datetime import datetime
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report,accuracy_score
 import os
 
 def fetch_weather_data():
@@ -57,3 +60,4 @@ if st.button("Fetch weather and predict flood"):
             st.error("⚠️ FLOOD RISK PREDICTED!")
         else:
             st.success("✅ No flood expected today.")
+
