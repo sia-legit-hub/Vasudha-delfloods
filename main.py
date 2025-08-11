@@ -86,10 +86,9 @@ if weather and river_level:
     st.subheader("📊 Model-Based Prediction:")
     if prediction == 1:
         st.error("⚠️ Model says: FLOOD LIKELY – Stay safe!")
-    elif prediction == 2:
-        st.error(" Model says: FLOOD HO JAYEGA- MARNA MAT")
     else:
         st.success("✅ Model says: NO FLOOD expected today.")
+
 
 
 
