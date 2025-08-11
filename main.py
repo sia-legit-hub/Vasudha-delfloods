@@ -90,10 +90,11 @@ if weather and river_level:
         st.success("✅ Model says: NO FLOOD expected today.")
 
 #REMOVE
-'''importances = model.feature_importances_
-features = ['precip', 'River_Level', 'temp', 'humidity', 'windspeed']
-for f, imp in zip(features, importances):
-    st.write(f"{f}: {imp:.3f}")'''
+#'''importances = model.feature_importances_
+#features = ['precip', 'River_Level', 'temp', 'humidity', 'windspeed']
+#for f, imp in zip(features, importances):
+#    st.write(f"{f}: {imp:.3f}")'''
+
 
 
 
