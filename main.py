@@ -13,7 +13,7 @@ st.write("🌧️ Welcome to our flood prediction model")
 #@st.cache_resource
 def train_model():
     df = pd.read_csv("delhi_flood_data_2023.csv")
-    X = df[['precip', 'river_level', 'temp', 'humidity', 'windspeed']]
+    X = df[['precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
     y = df['Flood']
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     model = RandomForestClassifier(n_estimators=100)
@@ -66,7 +66,7 @@ if weather and river_level:
     # Format data for prediction
     input_data = pd.DataFrame([{
         'precip': weather['precip'],
-        'river_level': river_level,
+        'River_Level': river_level,
         'temp': weather['temp'],
         'humidity': weather['humidity'],
         'windspeed': weather['windspeed']
@@ -90,10 +90,11 @@ if weather and river_level:
         st.success("✅ Model says: NO FLOOD expected today.")
 
 #REMOVE
-'''importances = model.feature_importances_
-features = ['precip', 'river_level', 'temp', 'humidity', 'windspeed']
+importances = model.feature_importances_
+features = ['precip', 'River_Level', 'temp', 'humidity', 'windspeed']
 for f, imp in zip(features, importances):
-    st.write(f"{f}: {imp:.3f}")'''
+    st.write(f"{f}: {imp:.3f}")
+
 
 
 
