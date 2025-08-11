@@ -74,21 +74,27 @@ if weather and river_level:
 
       # Show river level rule-based prediction
     st.subheader("📢 River Level:")
-    if river_level > 205.55:
-        st.error("🔴 ALERT: River level is above 205.55m. Flood WILL occur.")
-    elif river_level > 202:
-        st.warning("🟠 WARNING: River level is above 202m. Flood MAY occur.")
-    else:
-        st.success("🟢 River level is below 202m. Flood is NOT expected from river level alone.")
+    # Rule-based verdict
+if river_level > 205.55:
+    rule_alert = "WILL occur"
+    rule_flag = 1
+elif river_level > 202:
+    rule_alert = "MAY occur"
+    rule_flag = 1
+else:
+    rule_alert = "NOT expected"
+    rule_flag = 0
 
-     # Also run the model prediction
-    prediction = model.predict(input_data)[0]
-    st.subheader("📊 Model-Based Prediction:")
-    if prediction == 1:
-        st.error("⚠️ Model says: FLOOD LIKELY – Stay safe!")
-    else:
-        st.success("✅ Model says: NO FLOOD expected today.")
+# Model-based verdict
+model_pred = model.predict(input_data)[0]  # 1 = Flood, 0 = No Flood
 
+# Combined result
+if rule_flag == 1 or model_pred == 1:
+    st.error(f"🚨 Combined Alert: Flood Likely! Rule says: {rule_alert}, Model says: {'Likely' if model_pred == 1 else 'Unlikely'}")
+else:
+    st.success(f"✅ Combined Alert: No flood expected. Rule says: {rule_alert}, Model says: {'Likely' if model_pred == 1 else 'Unlikely'}")
+
+  
 
 
 
