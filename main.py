@@ -10,7 +10,7 @@ st.title("DelFloods")
 st.write("🌧️ Welcome to our flood prediction model")
 
 # ✅ Cached model training to avoid re-training on each rerun
-@st.cache_resource
+#@st.cache_resource
 def train_model():
     df = pd.read_csv("delhi_flood_data_2023.csv")
     X = df[['precip', 'river_level', 'temp', 'humidity', 'windspeed']]
@@ -88,6 +88,7 @@ if weather and river_level:
         st.error("⚠️ Model says: FLOOD LIKELY – Stay safe!")
     else:
         st.success("✅ Model says: NO FLOOD expected today.")
+
 
 
 
