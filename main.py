@@ -91,10 +91,45 @@ if weather and river_level:
 
 #REMOVE
 #st.write("🧠 Model feature names:", model.feature_names_in_)
-importances = model.feature_importances_
+'''importances = model.feature_importances_
 features = ['precip', 'river_level', 'temp', 'humidity', 'windspeed']
 for f, imp in zip(features, importances):
-    st.write(f"{f}: {imp:.3f}")
+    st.write(f"{f}: {imp:.3f}")'''
+import heapq
+
+priority_queue = []
+
+# Example inputs (use your actual inputs here)
+river_level = st.number_input("🌊 Enter current river level (in meters):", min_value=0.0, step=0.1)
+prediction = model.predict(input_data)[0]
+model_proba = model.predict_proba(input_data)[0][1]
+
+# Add alerts with priority (lower number = higher priority)
+if river_level > 205.55:
+    heapq.heappush(priority_queue, (1, f"🔴 CRITICAL ALERT: River level is dangerously high at {river_level}m! Flood imminent."))
+elif river_level > 202:
+    heapq.heappush(priority_queue, (2, f"🟠 WARNING: River level is above 202m. Flood possible."))
+
+# Model-based alerts get lower priority (higher number)
+if prediction == 1:
+    heapq.heappush(priority_queue, (3, f"⚠️ Model predicts flood with probability {model_proba:.2f}"))
+else:
+    heapq.heappush(priority_queue, (4, "✅ Model says no flood expected."))
+
+# Display alerts in priority order
+st.subheader("🚨 Flood Risk Alerts (Priority-based):")
+while priority_queue:
+    p, msg = heapq.heappop(priority_queue)
+    if p == 1:
+        st.error(msg)
+    elif p == 2:
+        st.warning(msg)
+    elif p == 3:
+        st.warning(msg)
+    else:
+        st.success(msg)
+
+
 
 
 
