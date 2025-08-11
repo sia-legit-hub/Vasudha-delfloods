@@ -59,11 +59,11 @@ def fetch_weather_data():
 weather = fetch_weather_data()
 
 # Make prediction if both inputs are ready
-if weather and river_level:
+iif weather and river_level:
     st.subheader("📊 Today's Weather Data:")
     st.json(weather)
 
-    # Format data for prediction
+    # Data for model prediction
     input_data = pd.DataFrame([{
         'precip': weather['precip'],
         'River_Level': river_level,
@@ -72,38 +72,23 @@ if weather and river_level:
         'windspeed': weather['windspeed']
     }])
 
-      # Show river level rule-based prediction
-    st.subheader("📢 River Level:")
-    # Rule-based verdict
-if river_level > 205.55:
-    rule_alert = "WILL occur"
-    rule_flag = 1
-elif river_level > 202:
-    rule_alert = "MAY occur"
-    rule_flag = 1
-else:
-    rule_alert = "NOT expected"
-    rule_flag = 0
+    # ----- Rule-based check -----
+    if river_level > 205.55:
+        rule_alert = "WILL occur"
+        rule_flag = 1
+    elif river_level > 202:
+        rule_alert = "MAY occur"
+        rule_flag = 1
+    else:
+        rule_alert = "NOT expected"
+        rule_flag = 0
 
-# Model-based verdict
-model_pred = model.predict(input_data)[0]  # 1 = Flood, 0 = No Flood
+    # ----- Model prediction -----
+    model_pred = model.predict(input_data)[0]  # 1 = flood likely, 0 = no flood
 
-# Combined result
-if rule_flag == 1 or model_pred == 1:
-    st.error(f"🚨 Combined Alert: Flood Likely! Rule says: {rule_alert}, Model says: {'Likely' if model_pred == 1 else 'Unlikely'}")
-else:
-    st.success(f"✅ Combined Alert: No flood expected. Rule says: {rule_alert}, Model says: {'Likely' if model_pred == 1 else 'Unlikely'}")
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
+    # ----- Combined decision -----
+    st.subheader("🚨 Final Flood Risk Decision:")
+    if rule_flag == 1 or model_pred == 1:
+        st.error(f"Flood Likely! (Rule: {rule_alert}, Model: {'Likely' if model_pred == 1 else 'Unlikely'})")
+    else:
+        st.success(f"No Flood Expected. (Rule: {rule_alert}, Model: {'Likely' if model_pred == 1 else 'Unlikely'})")
