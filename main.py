@@ -89,6 +89,8 @@ if weather and river_level:
     else:
         st.success("✅ Model says: NO FLOOD expected today.")
 
+#REMOVE
+st.write("🧠 Model feature names:", model.feature_names_in_)
 
 
 
