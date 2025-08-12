@@ -92,5 +92,7 @@ if weather and river_level:
         st.error(f"Flood Likely! (Rule: {rule_alert}, Model: {'Likely' if model_pred == 1 else 'Unlikely'})")
     else:
         st.success(f"No Flood Expected. (Rule: {rule_alert}, Model: {'Likely' if model_pred == 1 else 'Unlikely'})")
+print("LALALLALALLALLALAAAA")
+
 
 
