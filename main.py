@@ -59,7 +59,7 @@ def fetch_weather_data():
 weather = fetch_weather_data()
 
 # Make prediction if both inputs are ready
-iif weather and river_level:
+if weather and river_level:
     st.subheader("📊 Today's Weather Data:")
     st.json(weather)
 
@@ -92,4 +92,5 @@ iif weather and river_level:
         st.error(f"Flood Likely! (Rule: {rule_alert}, Model: {'Likely' if model_pred == 1 else 'Unlikely'})")
     else:
         st.success(f"No Flood Expected. (Rule: {rule_alert}, Model: {'Likely' if model_pred == 1 else 'Unlikely'})")
+
 
