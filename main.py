@@ -12,7 +12,7 @@ st.write("🌧️ Welcome to our flood prediction model")
 # ✅ Cached model training to avoid re-training on each rerun
 @st.cache_resource
 def train_model():
-    df = pd.read_csv("delhi_flood_data_2023.csv")
+    df = pd.read_csv("new_csv.csv")
     X = df[['precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
     y = df['Flood']
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -92,3 +92,4 @@ iif weather and river_level:
         st.error(f"Flood Likely! (Rule: {rule_alert}, Model: {'Likely' if model_pred == 1 else 'Unlikely'})")
     else:
         st.success(f"No Flood Expected. (Rule: {rule_alert}, Model: {'Likely' if model_pred == 1 else 'Unlikely'})")
+
