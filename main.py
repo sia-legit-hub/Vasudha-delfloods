@@ -9,8 +9,6 @@ from sklearn.ensemble import RandomForestClassifier
 st.title("DelFloods")
 st.write("🌧️ Welcome to our flood prediction model")
 
-# ✅ Cached model training to avoid re-training on each rerun
-@st.cache_resource
 def train_model():
     df = pd.read_csv("new_csv.csv")
     X = df[['precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
@@ -63,7 +61,7 @@ if weather and river_level:
     st.subheader("📊 Today's Weather Data:")
     st.json(weather)
 
-    # Data for model prediction
+    # Format data for prediction
     input_data = pd.DataFrame([{
         'precip': weather['precip'],
         'River_Level': river_level,
@@ -72,32 +70,22 @@ if weather and river_level:
         'windspeed': weather['windspeed']
     }])
 
-    # ----- Rule-based check -----
+      # Show river level rule-based prediction
+    st.subheader("📢 River Level:")
     if river_level > 205.55:
-        rule_alert = "WILL occur"
-        rule_flag = 1
+        st.error("🔴 ALERT: River level is above 205.55m. Flood WILL LIKELY occur.")
     elif river_level > 202:
-        rule_alert = "MAY occur"
-        rule_flag = 1
+        st.warning("🟠 WARNING: River level is above 202m. Flood MAY occur.")
     else:
-        rule_alert = "NOT expected"
-        rule_flag = 0
+        st.success("🟢 River level is below 202m. Flood is NOT expected from river level alone.")
 
-    # ----- Model prediction -----
-    model_pred = model.predict(input_data)[0]  # 1 = flood likely, 0 = no flood
-
-    # ----- Combined decision -----
-    st.subheader("🚨 Final Flood Risk Decision:")
-    if rule_flag == 1 or model_pred == 1:
-        st.error(f"Flood Likely! (Rule: {rule_alert}, Model: {'Likely' if model_pred == 1 else 'Unlikely'})")
+     # Also run the model prediction
+    prediction = model.predict(input_data)[0]
+    st.subheader("📊 Model-Based Prediction:")
+    if prediction == 2:
+        st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
+    elif prediction == 1:
+        st.error("⚠️ Model says: FLOOD LIKELY – Stay safe!")
     else:
-        st.success(f"No Flood Expected. (Rule: {rule_alert}, Model: {'Likely' if model_pred == 1 else 'Unlikely'})")
-print("LALALLALALLALLALAAAA")
-
-
-
-
-
-
-
+        st.success("✅ Model says: NO FLOOD expected today.")
 
