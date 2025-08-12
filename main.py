@@ -10,7 +10,7 @@ st.title("DelFloods")
 st.write("🌧️ Welcome to our flood prediction model")
 
 # ✅ Cached model training to avoid re-training on each rerun
-@st.cache_resource
+#@st.cache_resource
 def train_model():
     df = pd.read_csv("new_csv.csv")
     X = df[['precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
@@ -93,6 +93,7 @@ if weather and river_level:
     else:
         st.success(f"No Flood Expected. (Rule: {rule_alert}, Model: {'Likely' if model_pred == 1 else 'Unlikely'})")
 print("LALALLALALLALLALAAAA")
+
 
 
 
