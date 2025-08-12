@@ -5,6 +5,7 @@ from datetime import datetime
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
+print("LALALLALALLALLALAAAA")
 # Page setup
 st.title("DelFloods")
 st.write("🌧️ Welcome to our flood prediction model")
@@ -93,6 +94,7 @@ if weather and river_level:
     else:
         st.success(f"No Flood Expected. (Rule: {rule_alert}, Model: {'Likely' if model_pred == 1 else 'Unlikely'})")
 print("LALALLALALLALLALAAAA")
+
 
 
 
