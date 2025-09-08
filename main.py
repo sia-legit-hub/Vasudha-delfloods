@@ -19,9 +19,6 @@ def train_model():
     accuracy = model.score(X_test, y_test)
     return model, accuracy
 
-# Train model/test accuracy
-model, accuracy = train_model()
-st.write("✅ Model accuracy on test data:", accuracy)
 
 # Input for river level
 river_level = st.number_input("🌊 Enter current river level (in meters):", min_value=0.0, step=0.1)
@@ -88,6 +85,12 @@ if weather and river_level:
         st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
     else:
         st.success("✅ Model says: NO FLOOD expected today.")
+
+
+# Train model/test accuracy
+model, accuracy = train_model()
+st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
